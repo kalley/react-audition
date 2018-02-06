@@ -1,0 +1,32 @@
+.HeaderCell {
+  position: relative;
+}
+
+.HeaderCell [role='button'] {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+}
+
+.HeaderCell [role='button']:active,
+.HeaderCell [role='button']:focus,
+.HeaderCell [role='button']:hover {
+  outline: 0;
+}
+
+.HeaderCell [role='button']::after {
+  border-top: 1px solid #309bf8;
+  bottom: 1px;
+  content: '';
+  left: 0;
+  opacity: 0.25;
+  position: absolute;
+  right: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.HeaderCell [role='button']:active::after,
+.HeaderCell [role='button']:focus::after,
+.HeaderCell [role='button']:hover::after {
+  opacity: 0.75;
+}

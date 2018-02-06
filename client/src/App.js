@@ -1,20 +1,17 @@
-import React, { Component } from 'react';
+// @flow
 import './App.css';
+import React, { type ComponentType } from 'react';
+import Dashboard from './containers/Dashboard';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Front Porch Interview Project</h1>
-        </header>
-        <p className="App-intro">
-          Some boilerplate code has been provided; please build upon it (or replace it) to create your solution.
-        </p>
-        <p className="App-intro">Good luck!</p>
-      </div>
-    );
-  }
-}
+const App: ComponentType<{}> = () => (
+  <div className="App">
+    <header className="App-header">
+      <h1 className="App-title">Front Porch</h1>
+    </header>
+    <main className="App-content">
+      <Dashboard />
+    </main>
+  </div>
+);
 
 export default App;

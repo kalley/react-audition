@@ -1,0 +1,21 @@
+.Table {
+  text-align: left;
+  width: 100%;
+}
+
+.Table th {
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+.Table-SortArrow {
+  margin-left: 0.25rem;
+}
+
+.Table-cell {
+  padding: 0.25rem 0;
+}
+
+.Table-cell--numeric {
+  text-align: right;
+}
