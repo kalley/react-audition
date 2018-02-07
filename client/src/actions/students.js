@@ -22,9 +22,9 @@ export type FailureAction = {
   type: 'FETCH_STUDENTS_FAILURE'
 };
 
-export const fetchStudents = () => async (
-  dispatch: Dispatch<RequestAction | SuccessAction | FailureAction>
-) => {
+export type Actions = RequestAction | SuccessAction | FailureAction;
+
+export const fetchStudents = () => async (dispatch: Dispatch<Actions>) => {
   dispatch({ type: FETCH_STUDENTS_REQUEST });
 
   try {

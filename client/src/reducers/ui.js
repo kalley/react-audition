@@ -5,7 +5,7 @@ export type State = {
   selectedSubject: ?string
 };
 
-const initialState = {
+export const initialState = {
   selectedSubject: null
 };
 

@@ -12,22 +12,32 @@ const Header = styled('header')`
 const Title = styled('h1')`
   font-size: 1.22em;
   font-weight: 400;
-  margin: 0 150px;
+  margin: 0 auto;
+  max-width: 960px;
   text-transform: uppercase;
 `;
 
 const Content = styled('main')`
-  margin: 0 150px;
+  margin: 0 auto;
+  max-width: 960px;
   padding: 4.25rem 0;
+`;
+
+const Centered = styled('div')`
+  margin: 0 1rem;
 `;
 
 const App = () => (
   <div className="app">
     <Header>
-      <Title>Front Porch</Title>
+      <Centered>
+        <Title>Front Porch</Title>
+      </Centered>
     </Header>
     <Content>
-      <Dashboard />
+      <Centered>
+        <Dashboard />
+      </Centered>
     </Content>
   </div>
 );

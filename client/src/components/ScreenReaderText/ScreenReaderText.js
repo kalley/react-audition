@@ -53,7 +53,7 @@ export default class ScreenReaderText extends Component<Props, State> {
 
   unmounted: boolean = false;
 
-  timer: ?number;
+  timer: TimeoutID;
 
   setText(text: string) {
     if (this.unmounted) {

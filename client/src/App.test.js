@@ -1,11 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { shallow } from 'enzyme';
 import App from './App';
 
-// what a lovely place for some tests...
+describe('App', () => {
+  it('renders without crashing', () => {
+    const component = shallow(<App />);
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
+    expect(component).toMatchSnapshot();
+  });
 });

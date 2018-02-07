@@ -3,9 +3,7 @@ import {
   FETCH_STUDENTS_REQUEST,
   FETCH_STUDENTS_SUCCESS,
   FETCH_STUDENTS_FAILURE,
-  type RequestAction,
-  type SuccessAction,
-  type FailureAction,
+  type Actions,
   type NormalizedData
 } from '../actions/students';
 
@@ -15,7 +13,7 @@ export type State = {
   fetching: boolean
 };
 
-const initialState: State = {
+export const initialState: State = {
   fetching: false,
   students: {
     byId: {}
@@ -32,7 +30,7 @@ const initialState: State = {
 
 export default function entities(
   state: State = initialState,
-  action: RequestAction | SuccessAction | FailureAction
+  action: Actions
 ): State {
   switch (action.type) {
     case FETCH_STUDENTS_REQUEST:
@@ -42,6 +40,7 @@ export default function entities(
       };
     case FETCH_STUDENTS_SUCCESS:
       return {
+        ...state,
         ...action.payload,
         fetching: false
       };

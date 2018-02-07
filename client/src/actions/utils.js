@@ -1,5 +1,5 @@
 // @flow
-import { forEach, reduce, uniqueId } from 'lodash';
+import { forEach, memoize, reduce, uniqueId } from 'lodash';
 
 export type Response = Array<{|
   name: string,
@@ -57,12 +57,18 @@ export type NormalizedData = {|
   }
 |};
 
+// This is mostly for tests, but probably not a bad idea in general
+const createId = memoize(
+  (uniqueThing: Object | string, prefix: string) => uniqueId(prefix),
+  (uniqueThing: Object | string) => JSON.stringify(uniqueThing)
+);
+
 export const normalizeResponse = (response: Response): NormalizedData => {
   const classNameIdMap: { [string]: string } = {};
   const normalizedData = reduce(
     response,
     ({ students, classes, tests }: NormalizedData, student) => {
-      const studentId = uniqueId('student');
+      const studentId = createId(student.name, 'student');
 
       students.byId[studentId] = {
         id: studentId,
@@ -74,7 +80,7 @@ export const normalizeResponse = (response: Response): NormalizedData => {
         let classId = classNameIdMap[name];
 
         if (!classId) {
-          classId = uniqueId('class');
+          classId = createId(name, 'class');
           classNameIdMap[name] = classId;
 
           classes.byId[classId] = {
@@ -87,7 +93,7 @@ export const normalizeResponse = (response: Response): NormalizedData => {
         classes.byId[classId].students.push(studentId);
 
         forEach(classTests, test => {
-          const testId = uniqueId('test');
+          const testId = createId(test, 'test');
 
           tests.byId[testId] = {
             classId,

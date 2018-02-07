@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Card /> renderTitle renders a different title component 1`] = `
+.emotion-0 {
+  border: 1px solid #309bf8;
+  color: #309bf8;
+  margin-bottom: 1.25rem;
+  max-width: 725px;
+}
+
+<Card
+  renderTitle={[Function]}
+  title="Test"
+>
+  <Styled(div)>
+    <div
+      className="emotion-0"
+    >
+      <div>
+        Test
+      </div>
+    </div>
+  </Styled(div)>
+</Card>
+`;
+
+exports[`<Card /> renders 1`] = `
+.emotion-1 {
+  border: 1px solid #309bf8;
+  color: #309bf8;
+  margin-bottom: 1.25rem;
+  max-width: 725px;
+}
+
+.emotion-0 {
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 1.2rem;
+  font-weight: 400;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  margin: 0;
+  padding: 2rem 2rem 2rem 3rem;
+}
+
+<Card
+  renderTitle={[Function]}
+  title="Test"
+>
+  <Styled(div)>
+    <div
+      className="emotion-1"
+    >
+      <Styled(h2)>
+        <h2
+          className="emotion-0"
+        >
+          Test
+        </h2>
+      </Styled(h2)>
+    </div>
+  </Styled(div)>
+</Card>
+`;

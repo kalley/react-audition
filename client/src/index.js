@@ -7,8 +7,8 @@ import App from './App';
 import configureStore from './store';
 
 injectGlobal`
-  * {
-    box-sizing: border-box;
+  html {
+    font-size: 14px;
   }
 
   body {
@@ -16,7 +16,16 @@ injectGlobal`
     padding: 0;
     font-family: sans-serif;
   }
+
+  * {
+    box-sizing: border-box;
+  }
   
+  @media(min-width: 37.5em) {
+    html {
+      font-size: 16px;
+    }
+  }
 `;
 
 const store = configureStore();

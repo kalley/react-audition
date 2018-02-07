@@ -1,5 +1,2 @@
 // @flow
-import Card from './Card';
-
-export * from './Card';
-export default Card;
+export { default, RenderTitle, Title } from './Card';
