@@ -1,6 +1,5 @@
 // @flow
-let counter = 1;
-const uniqueId = (prefix: string = '') => `${prefix}_${counter++}`;
+import { forEach, reduce, uniqueId } from 'lodash';
 
 export type Response = Array<{|
   name: string,
@@ -60,7 +59,8 @@ export type NormalizedData = {|
 
 export const normalizeResponse = (response: Response): NormalizedData => {
   const classNameIdMap: { [string]: string } = {};
-  const normalizedData = response.reduce(
+  const normalizedData = reduce(
+    response,
     ({ students, classes, tests }: NormalizedData, student) => {
       const studentId = uniqueId('student');
 
@@ -70,7 +70,7 @@ export const normalizeResponse = (response: Response): NormalizedData => {
         grade: student.grade
       };
 
-      student.classes.forEach(({ name, tests: classTests }) => {
+      forEach(student.classes, ({ name, tests: classTests }) => {
         let classId = classNameIdMap[name];
 
         if (!classId) {
@@ -86,7 +86,7 @@ export const normalizeResponse = (response: Response): NormalizedData => {
 
         classes.byId[classId].students.push(studentId);
 
-        classTests.forEach(test => {
+        forEach(classTests, test => {
           const testId = uniqueId('test');
 
           tests.byId[testId] = {

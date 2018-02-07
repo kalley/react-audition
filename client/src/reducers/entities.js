@@ -46,11 +46,18 @@ export default function entities(
         fetching: false
       };
     case FETCH_STUDENTS_FAILURE:
-      console.warn(action.payload.stack);
+      const { payload } = action;
+
+      // We don't want the error to crash, just to make it obvious to the developer
+      if (process.env.NODE_ENV !== 'production') {
+        setTimeout(() => {
+          throw payload;
+        }, 1);
+      }
 
       return {
         ...state,
-        error: action.payload,
+        error: payload,
         fetching: false
       };
     default:

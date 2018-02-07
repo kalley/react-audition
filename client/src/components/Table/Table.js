@@ -1,4 +1,5 @@
 // @flow
+import { map } from 'lodash';
 import React, { type Node as ReactNode } from 'react';
 import styled from 'react-emotion';
 import Cell from './Cell';
@@ -26,7 +27,7 @@ const Table = ({ headers, onSort, rows, sortBy, sortDirection }: Props) => (
   <Container aria-readonly="true">
     <thead>
       <tr role="row">
-        {headers.map(({ key, title, type }) => (
+        {map(headers, ({ key, title, type }) => (
           <HeaderCell
             key={key}
             numeric={type === 'numeric'}
@@ -40,9 +41,9 @@ const Table = ({ headers, onSort, rows, sortBy, sortDirection }: Props) => (
       </tr>
     </thead>
     <tbody>
-      {rows.map((row, i) => (
+      {map(rows, (row, i) => (
         <tr key={`row-${i}`} role="row">
-          {headers.map(({ key, rowHeader, type }) => (
+          {map(headers, ({ key, rowHeader, type }) => (
             <Cell
               key={key}
               numeric={type === 'numeric'}

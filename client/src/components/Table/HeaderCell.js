@@ -55,6 +55,10 @@ const Sortable = styled('span')`
   }
 `;
 
+const SortableArrows = styled(SortArrows)`
+  margin-left: 0.5rem;
+`;
+
 export default class HeaderCell extends PureComponent<Props> {
   handleClick = () =>
     this.props.sortKey && this.props.onClick(this.props.sortKey);
@@ -80,7 +84,7 @@ export default class HeaderCell extends PureComponent<Props> {
             tabIndex={0}
           >
             {title}
-            <SortArrows className="Table-SortArrow" size={10} sorted={sort} />
+            <SortableArrows size={10} sorted={sort} />
           </Sortable>
         ) : (
           title

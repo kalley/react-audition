@@ -1,5 +1,5 @@
 // @flow
-import React, { type ComponentType } from 'react';
+import React from 'react';
 import styled from 'react-emotion';
 import Dashboard from './containers/Dashboard';
 
@@ -18,10 +18,10 @@ const Title = styled('h1')`
 
 const Content = styled('main')`
   margin: 0 150px;
-  padding: 70px 0;
+  padding: 4.25rem 0;
 `;
 
-const App: ComponentType<{}> = () => (
+const App = () => (
   <div className="app">
     <Header>
       <Title>Front Porch</Title>

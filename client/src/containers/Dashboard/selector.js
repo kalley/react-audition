@@ -1,4 +1,5 @@
 // @flow
+import { map, reduce } from 'lodash';
 import { createSelector } from 'reselect';
 import type { ReduxState } from '../../reducers';
 
@@ -13,10 +14,9 @@ const calculateClassAverage = (
   classId: string,
   tests: $ElementType<$ElementType<ReduxState, 'entities'>, 'tests'>
 ) => {
-  const { length, sum } = Object.keys(tests.byId).reduce(
-    (memo, testId) => {
-      const test = tests.byId[testId];
-
+  const { length, sum } = reduce(
+    tests.byId,
+    (memo, test, testId) => {
       if (
         !tests.byClassId[classId].includes(testId) ||
         !tests.byStudentId[studentId].includes(testId)
@@ -43,17 +43,15 @@ export const getClasses = createSelector(
   selectStudents,
   selectTests,
   (classes, students, tests) =>
-    Object.keys(classes.byId).map(classId => {
-      const subject = classes.byId[classId];
-
+    map(classes.byId, subject => {
       return {
-        id: classId,
+        id: subject.id,
         name: subject.name,
-        students: subject.students.map(studentId => {
+        students: map(subject.students, studentId => {
           const { name } = students.byId[studentId];
           // coercing to string to make the sort function reusable
           const avgGrade = `${Math.round(
-            calculateClassAverage(studentId, classId, tests)
+            calculateClassAverage(studentId, subject.id, tests)
           )}%`;
 
           return {

@@ -30,7 +30,7 @@ export class Dashboard extends PureComponent<Props> {
     const { isLoading, onSubjectClick, selectedSubject, subjects } = this.props;
 
     return (
-      <div className="Dashboard">
+      <div>
         {subjects.map(subject => (
           <ClassCard
             isSelected={subject.id === selectedSubject}

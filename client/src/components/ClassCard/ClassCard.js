@@ -1,4 +1,5 @@
 // @flow
+import { get, orderBy } from 'lodash';
 import React, { Component, Fragment, type ElementRef, type Ref } from 'react';
 import styled from 'react-emotion';
 import Card, { Title, type RenderTitle } from '../Card';
@@ -55,20 +56,11 @@ const TitleCaret = styled(Caret)`
   ${({ open }: { open: boolean }) => open && `transform: rotate(180deg);`};
 `;
 
-const get = (obj: ?{ [string]: * }, prop: string): string =>
-  (obj && obj[prop].toString()) || '';
-
 export default class ClassCard extends Component<Props, State> {
-  // constructor is necessary to pass handleClick in without arbitrarily moving it above
-  // setting state as a class property...
-  constructor(props: Props) {
-    super(props);
-
-    this.state = {
-      sortBy: null,
-      sortDirection: 'asc'
-    };
-  }
+  state = {
+    sortBy: null,
+    sortDirection: 'asc'
+  };
 
   handleClick = () => {
     const { isSelected, onClick, subject } = this.props;
@@ -89,18 +81,14 @@ export default class ClassCard extends Component<Props, State> {
     if (this.screenReaderText) {
       const { screenReaderText } = this;
 
-      clearTimeout(this.textTimer);
       screenReaderText.setText(
         `(Sorted by ${get(
           headers.find(({ key }) => key === sortBy),
           'title'
         )}: ${sortDirection})`
       );
-      this.textTimer = setTimeout(() => screenReaderText.setText(''), 2000);
     }
   };
-
-  textTimer: ?number;
 
   screenReaderText: ?ElementRef<typeof ScreenReaderText>;
 
@@ -121,11 +109,7 @@ export default class ClassCard extends Component<Props, State> {
     const { sortBy, sortDirection } = this.state;
     const { subject } = this.props;
     const rows = sortBy
-      ? subject.students.sort(
-          (a, b) =>
-            a[sortBy].localeCompare(b[sortBy]) *
-            (sortDirection === 'asc' ? 1 : -1)
-        )
+      ? orderBy(subject.students, [sortBy], [sortDirection])
       : subject.students;
 
     return (

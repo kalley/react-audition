@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import styled from 'react-emotion';
 
 type Props = {
@@ -21,7 +21,13 @@ const Text = styled('div')`
   width: 1px;
 `;
 
-export default class ScreenReaderText extends PureComponent<Props, State> {
+/*
+ * This component is used to let users with screenreaders know something changed.
+ * It only updates on state changes because it is more or less a self-contained
+ * Component that shouldn't affect any others in any way. You have to manually
+ * call `setText` to make this do anything. 
+ */
+export default class ScreenReaderText extends Component<Props, State> {
   static defaultProps = {
     initialText: ''
   };
@@ -30,18 +36,38 @@ export default class ScreenReaderText extends PureComponent<Props, State> {
     text: this.props.initialText
   };
 
+  componentDidMount() {
+    if (this.state.text) {
+      this.clearText();
+    }
+  }
+
+  // This component only updates on state changes.
+  shouldComponentUpdate(nextProps: Props, nextState: State) {
+    return nextState.text !== this.state.text;
+  }
+
   componentWillUnmount() {
     this.unmounted = true;
   }
 
   unmounted: boolean = false;
 
+  timer: ?number;
+
   setText(text: string) {
     if (this.unmounted) {
       return;
     }
 
+    clearTimeout(this.timer);
+
     this.setState({ text });
+    this.clearText();
+  }
+
+  clearText() {
+    this.timer = setTimeout(() => this.setState({ text: '' }), 2000);
   }
 
   render() {
