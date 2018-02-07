@@ -1,7 +1,7 @@
 // @flow
-import './Table.css';
 import React, { type Node as ReactNode } from 'react';
-import classnames from 'classnames';
+import styled from 'react-emotion';
+import Cell from './Cell';
 import HeaderCell from './HeaderCell';
 
 type Props = {
@@ -17,22 +17,19 @@ type Props = {
   sortDirection: 'asc' | 'desc'
 };
 
-const getCellClassName = (type: ?'numeric' = null): string =>
-  classnames(
-    'Table-cell',
-    type && {
-      [`Table-cell--${type}`]: true
-    }
-  );
+const Container = styled('table')`
+  text-align: left;
+  width: 100%;
+`;
 
 const Table = ({ headers, onSort, rows, sortBy, sortDirection }: Props) => (
-  <table aria-readonly="true" className="Table">
+  <Container aria-readonly="true">
     <thead>
       <tr role="row">
         {headers.map(({ key, title, type }) => (
           <HeaderCell
-            className={getCellClassName(type)}
             key={key}
+            numeric={type === 'numeric'}
             onClick={onSort}
             sortBy={sortBy}
             sortDirection={sortDirection}
@@ -46,18 +43,18 @@ const Table = ({ headers, onSort, rows, sortBy, sortDirection }: Props) => (
       {rows.map((row, i) => (
         <tr key={`row-${i}`} role="row">
           {headers.map(({ key, rowHeader, type }) => (
-            <td
-              className={getCellClassName(type)}
+            <Cell
               key={key}
+              numeric={type === 'numeric'}
               role={rowHeader ? 'rowheader' : 'gridcell'}
             >
               {row[key]}
-            </td>
+            </Cell>
           ))}
         </tr>
       ))}
     </tbody>
-  </table>
+  </Container>
 );
 
 export default Table;

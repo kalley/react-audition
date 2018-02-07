@@ -1,8 +1,10 @@
 // @flow
-import './ClassCard.css';
-import React, { Component, type ElementProps } from 'react';
-import Card from '../Card';
+import React, { Component, Fragment, type ElementRef, type Ref } from 'react';
+import styled from 'react-emotion';
+import Card, { Title, type RenderTitle } from '../Card';
+import Caret from '../Caret';
 import Table from '../Table';
+import ScreenReaderText from '../ScreenReaderText';
 
 type Props = {
   isSelected: boolean,
@@ -19,25 +21,42 @@ type Props = {
 
 type State = {
   sortBy: ?('name' | 'avgGrade'),
-  sortDirection: 'asc' | 'desc',
-  titleComponent: $ElementType<ElementProps<typeof Card>, 'titleComponent'>
+  sortDirection: 'asc' | 'desc'
 };
 
-const titleFactory: (
-  onClick: () => void
-) => $ElementType<State, 'titleComponent'> = onClick =>
-  function Title({ children, className }) {
-    return (
-      <h2 className="ClassCard-title">
-        <button
-          className={`${className} ClassCard-title__button`}
-          onClick={onClick}
-        >
-          {children}
-        </button>
-      </h2>
-    );
-  };
+const headers = [
+  {
+    key: 'name',
+    rowHeader: true,
+    title: 'Student Name'
+  },
+  {
+    key: 'avgGrade',
+    title: 'Average Grade',
+    type: 'numeric'
+  }
+];
+
+const TitleWrap = styled('h2')`
+  margin: 0;
+`;
+
+const TitleButton = styled(Title.withComponent('button'))`
+  width: 100%;
+
+  &:active,
+  &:focus {
+    outline: 0;
+    text-decoration: underline;
+  }
+`;
+
+const TitleCaret = styled(Caret)`
+  ${({ open }: { open: boolean }) => open && `transform: rotate(180deg);`};
+`;
+
+const get = (obj: ?{ [string]: * }, prop: string): string =>
+  (obj && obj[prop].toString()) || '';
 
 export default class ClassCard extends Component<Props, State> {
   // constructor is necessary to pass handleClick in without arbitrarily moving it above
@@ -47,8 +66,7 @@ export default class ClassCard extends Component<Props, State> {
 
     this.state = {
       sortBy: null,
-      sortDirection: 'asc',
-      titleComponent: titleFactory(this.handleClick)
+      sortDirection: 'asc'
     };
   }
 
@@ -60,13 +78,44 @@ export default class ClassCard extends Component<Props, State> {
 
   handleSort = (sortBy: string) => {
     const { sortBy: prevSortBy, sortDirection: prevSortDirection } = this.state;
+    const sortDirection =
+      sortBy === prevSortBy && prevSortDirection === 'asc' ? 'desc' : 'asc';
 
     this.setState({
-      sortBy: ((sortBy: any): 'name' | 'avgGrade'),
-      sortDirection:
-        sortBy === prevSortBy && prevSortDirection === 'asc' ? 'desc' : 'asc'
+      sortDirection,
+      sortBy: ((sortBy: any): 'name' | 'avgGrade')
     });
+
+    if (this.screenReaderText) {
+      const { screenReaderText } = this;
+
+      clearTimeout(this.textTimer);
+      screenReaderText.setText(
+        `(Sorted by ${get(
+          headers.find(({ key }) => key === sortBy),
+          'title'
+        )}: ${sortDirection})`
+      );
+      this.textTimer = setTimeout(() => screenReaderText.setText(''), 2000);
+    }
   };
+
+  textTimer: ?number;
+
+  screenReaderText: ?ElementRef<typeof ScreenReaderText>;
+
+  setScreenReaderTextRef: Ref<typeof ScreenReaderText> = screenReaderText => {
+    this.screenReaderText = screenReaderText;
+  };
+
+  renderTitle: RenderTitle = ({ title }) => (
+    <TitleWrap>
+      <TitleButton onClick={this.handleClick}>
+        {title}
+        <TitleCaret open={this.props.isSelected} size={10} />
+      </TitleButton>
+    </TitleWrap>
+  );
 
   renderStudentTable() {
     const { sortBy, sortDirection } = this.state;
@@ -80,24 +129,16 @@ export default class ClassCard extends Component<Props, State> {
       : subject.students;
 
     return (
-      <Table
-        headers={[
-          {
-            key: 'name',
-            rowHeader: true,
-            title: 'Student Name'
-          },
-          {
-            key: 'avgGrade',
-            title: 'Average Grade',
-            type: 'numeric'
-          }
-        ]}
-        onSort={this.handleSort}
-        rows={rows}
-        sortBy={sortBy}
-        sortDirection={sortDirection}
-      />
+      <Fragment>
+        <Table
+          headers={headers}
+          onSort={this.handleSort}
+          rows={rows}
+          sortBy={sortBy}
+          sortDirection={sortDirection}
+        />
+        <ScreenReaderText ref={this.setScreenReaderTextRef} />
+      </Fragment>
     );
   }
 
@@ -105,7 +146,7 @@ export default class ClassCard extends Component<Props, State> {
     const { isSelected, subject } = this.props;
 
     return (
-      <Card title={subject.name} titleComponent={this.state.titleComponent}>
+      <Card renderTitle={this.renderTitle} title={subject.name}>
         {isSelected && this.renderStudentTable()}
       </Card>
     );

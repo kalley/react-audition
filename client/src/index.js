@@ -2,9 +2,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import './index.css';
+import { injectGlobal } from 'react-emotion';
 import App from './App';
 import configureStore from './store';
+
+injectGlobal`
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+  }
+  
+`;
 
 const store = configureStore();
 

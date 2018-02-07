@@ -1,16 +1,34 @@
 // @flow
-import './App.css';
 import React, { type ComponentType } from 'react';
+import styled from 'react-emotion';
 import Dashboard from './containers/Dashboard';
 
+const Header = styled('header')`
+  background-color: #309bf8;
+  color: white;
+  padding: 3.75rem 0;
+`;
+
+const Title = styled('h1')`
+  font-size: 1.22em;
+  font-weight: 400;
+  margin: 0 150px;
+  text-transform: uppercase;
+`;
+
+const Content = styled('main')`
+  margin: 0 150px;
+  padding: 70px 0;
+`;
+
 const App: ComponentType<{}> = () => (
-  <div className="App">
-    <header className="App-header">
-      <h1 className="App-title">Front Porch</h1>
-    </header>
-    <main className="App-content">
+  <div className="app">
+    <Header>
+      <Title>Front Porch</Title>
+    </Header>
+    <Content>
       <Dashboard />
-    </main>
+    </Content>
   </div>
 );
 

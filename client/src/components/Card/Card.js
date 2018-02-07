@@ -1,31 +1,52 @@
 // @flow
-import './Card.css';
-import React, { type ComponentType, type Node } from 'react';
-import classnames from 'classnames';
-import Caret from '../Caret';
+import React, {
+  type Element as ReactElement,
+  type Node as ReactNode
+} from 'react';
+import styled from 'react-emotion';
+
+export type RenderTitle = ({ title: ReactNode }) => ReactElement<*>;
 
 type Props = {
-  children?: Node,
-  title: Node,
-  titleComponent: ComponentType<{ children: Node, className: string }>
+  children?: ReactNode,
+  renderTitle: RenderTitle,
+  title: ReactNode
 };
 
-const Card = ({ children, title, titleComponent: Title }: Props) => (
-  <div
-    className={classnames('Card', {
-      'Card--collapsed': !children
-    })}
-  >
-    <Title className="Card-title">
-      {title}
-      <Caret className="Card-Caret" size={10} />
-    </Title>
-    {children && <div className="Card-body">{children}</div>}
-  </div>
+const Container = styled('div')`
+  border: 1px solid #309bf8;
+  color: #309bf8;
+  margin-bottom: 1.25rem;
+  max-width: 725px;
+`;
+
+export const Title = styled('h2')`
+  align-items: center;
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  font-size: 1.2rem;
+  font-weight: 400;
+  justify-content: space-between;
+  margin: 0;
+  padding: 2rem 2rem 2rem 3rem;
+`;
+
+const Body = styled('div')`
+  padding: 0 2rem 2rem 3rem;
+`;
+
+const Card = ({ children, renderTitle, title }: Props) => (
+  <Container>
+    {renderTitle({ title })}
+    {children && <Body>{children}</Body>}
+  </Container>
 );
 
 Card.defaultProps = {
-  titleComponent: 'h2'
+  renderTitle: ({ title }) => <Title>{title}</Title>
 };
 
 export default Card;
