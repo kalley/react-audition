@@ -15,7 +15,8 @@ type Props = {
     id: string,
     name: string,
     students: Array<{
-      avgGrade: string,
+      avgGrade: number,
+      avgGradeText: string,
       name: string
     }>
   }>

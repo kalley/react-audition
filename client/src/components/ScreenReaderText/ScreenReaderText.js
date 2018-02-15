@@ -63,12 +63,17 @@ export default class ScreenReaderText extends Component<Props, State> {
     clearTimeout(this.timer);
 
     this.setState({ text });
-    this.clearText();
+    this.timer = setTimeout(this.clearText, 2000);
   }
 
-  clearText() {
-    this.timer = setTimeout(() => this.setState({ text: '' }), 2000);
-  }
+  clearText = () => {
+    if (this.unmounted) {
+      return;
+    }
+
+    clearTimeout(this.timer);
+    this.setState({ text: '' });
+  };
 
   render() {
     return <Text aria-live="polite">{this.state.text}</Text>;

@@ -9,6 +9,7 @@ type Props = {
   headers: Array<{
     key: string,
     rowHeader?: boolean,
+    sortKey?: string,
     title: ReactNode,
     type?: 'numeric'
   }>,
@@ -27,14 +28,14 @@ const Table = ({ headers, onSort, rows, sortBy, sortDirection }: Props) => (
   <Container aria-readonly="true">
     <thead>
       <tr role="row">
-        {map(headers, ({ key, title, type }) => (
+        {map(headers, ({ key, sortKey, title, type }) => (
           <HeaderCell
             key={key}
             numeric={type === 'numeric'}
             onClick={onSort}
             sortBy={sortBy}
             sortDirection={sortDirection}
-            sortKey={key}
+            sortKey={sortKey || key}
             title={title}
           />
         ))}

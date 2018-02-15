@@ -49,13 +49,13 @@ export const getClasses = createSelector(
         name: subject.name,
         students: map(subject.students, studentId => {
           const { name } = students.byId[studentId];
+          const avgGrade = calculateClassAverage(studentId, subject.id, tests);
           // coercing to string to make the sort function reusable
-          const avgGrade = `${Math.round(
-            calculateClassAverage(studentId, subject.id, tests)
-          )}%`;
+          const avgGradeText = `${Math.round(avgGrade)}%`;
 
           return {
             avgGrade,
+            avgGradeText,
             name,
             id: studentId
           };
