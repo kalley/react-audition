@@ -1,5 +1,5 @@
 // @flow
-import { forEach, memoize, reduce, uniqueId } from 'lodash';
+import { forEach, includes, memoize, reduce, uniqueId } from 'lodash';
 
 export type Response = Array<{|
   name: string,
@@ -93,7 +93,14 @@ export const normalizeResponse = (response: Response): NormalizedData => {
         classes.byId[classId].students.push(studentId);
 
         forEach(classTests, test => {
-          const testId = createId(test, 'test');
+          const testId = createId(
+            {
+              ...test,
+              classId,
+              studentId
+            },
+            'test'
+          );
 
           tests.byId[testId] = {
             classId,
@@ -107,13 +114,17 @@ export const normalizeResponse = (response: Response): NormalizedData => {
             tests.byClassId[classId] = [];
           }
 
-          tests.byClassId[classId].push(testId);
+          if (!includes(tests.byClassId[classId], testId)) {
+            tests.byClassId[classId].push(testId);
+          }
 
           if (!tests.byStudentId[studentId]) {
             tests.byStudentId[studentId] = [];
           }
 
-          tests.byStudentId[studentId].push(testId);
+          if (!includes(tests.byStudentId[studentId], testId)) {
+            tests.byStudentId[studentId].push(testId);
+          }
         });
       });
 
