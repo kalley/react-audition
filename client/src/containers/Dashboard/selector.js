@@ -1,5 +1,5 @@
 // @flow
-import { map, reduce } from 'lodash';
+import { includes, map, reduce } from 'lodash';
 import { createSelector } from 'reselect';
 import type { ReduxState } from '../../reducers';
 
@@ -18,8 +18,8 @@ const calculateClassAverage = (
     tests.byId,
     (memo, test, testId) => {
       if (
-        !tests.byClassId[classId].includes(testId) ||
-        !tests.byStudentId[studentId].includes(testId)
+        !includes(tests.byClassId[classId], testId) ||
+        !includes(tests.byStudentId[studentId], testId)
       ) {
         return memo;
       }
